@@ -10,6 +10,10 @@ contract Escrow is ownable {
   function releaseFunds() {
     
   }
+
+  function getEscrowBalance() external returns(uint) {
+    
+  }
   
 }
 

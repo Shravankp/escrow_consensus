@@ -18,10 +18,11 @@ Eg: Finance department/admin can lock-in a portion of tax collected to these con
 ## Assumptions/Improvements:
 - We store the proposal as a string which can be stored as a doc link
 - executors have static roles here, but this can be dynamic with different authoritative power and roles in the system
-- Change the proposal details based on the votes
+- Enable admin to change the proposal details based on the votes
 - Funds can be released in stages, seek for approval from appropriate people after each stage, get pre-money & full money after each stage completion
 - We assume every aadhaar number input is right and valid
 - Voting logic can be made dynamic based on usecases of each proposals
+- Add events whenever there is a state change so that can be shown on frontend
 
 ## System design:
 Entities:

@@ -16,13 +16,26 @@ contract Governance is ownable {
   }
 
   Proposal[] public proposals;
-  
-  function createProposal(bytes32 proposalName, bytes proposalString) {
-    
+
+  function createProposal(bytes32 _proposalName, bytes memory _proposalString) external onlyOwner returns(uint) {
+    uint id = proposals.push(Proposal({proposalName: _proposalName, 
+                                      proposalString: _proposalString,
+                                      proposalStatus: Status.initialised})) - 1;
+    return id;
   }
 
-  function allocateAmount() payable{
-    //call escrow function
+  function allocateExecutors(bytes32 _proposalId, address[] memory _addresses) external onlyOwner {
+    Proposal proposal = proposals[_proposalId];
+    require(proposal.proposalStatus == Status.initialised);
+    proposal.executors = _addresses;
+  }
+
+  function allocateAmount(bytes32 _proposalId) external payable{
+    Proposal proposal = proposals[_proposalId];
+    require(proposal.proposalStatus == Status.executorsAllocated);
+    uint amountToAllocate = msg.value;
+    //todo: call escrow function that assigns amountToAllocate to a state variable
+    //escrow can have proposal_id to amount mapping
   }
 
   function callForVoting() {
@@ -33,9 +46,7 @@ contract Governance is ownable {
     
   }
 
-  function allocateRecipients() {
-    
-  }
+
 
   function updateProposalStatus() {
     
