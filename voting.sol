@@ -2,25 +2,26 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
-contract Voting is ownable {
+contract Voting is Ownable {
 
   mapping(uint => address) internal walletAadhaarMapping;
 
-  function giveVote(proposalName) {
+  function giveVote(string memory proposalName) public {
     
   }
 
-  function votingLogic() {
+  function votingLogic() public {
     //uint minimumVotesRequired;
     //uint minPositiveVotesRequired;
   }
 
-  function getResults(){
+  function getResults() public {
     
   }
 
-  function votingDetails(){
+  function votingDetails() public {
     //total no of votes
     
   }
