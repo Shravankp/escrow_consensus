@@ -8,8 +8,8 @@ contract Voting is Ownable {
 
   struct VoteDetails{
     uint totalVotes;
-    uint votedForCount;
-    uint votedAgaintCount;
+    uint votedFor_count;
+    uint votedAgaint_count;
     uint minTotalVotesToClose;
   }
 
@@ -31,20 +31,20 @@ contract Voting is Ownable {
     VoteDetails storage vDetail = proposalId_to_voteDetails[_proposal_id];
     vDetail.totalVotes += 1;
     if (_voteDecision) {
-      vDetail.votedForCount += 1;
+      vDetail.votedFor_count += 1;
     } else {
-      vDetail.votedAgaintCount += 1;
+      vDetail.votedAgaint_count += 1;
     }
   }
 
-  function votingLogic() internal onlyOwner {
-
-  }
-
-  function getResults(uint _proposal_id) external onlyOwner returns(bool){
-    //check if total votes >= minVotes
-    // 
-    
+  function getIfProposolApproved(uint _proposal_id) external view onlyOwner returns(bool){
+    VoteDetails memory vDetail = proposalId_to_voteDetails[_proposal_id];
+    require(vDetail.totalVotes >= vDetail.minTotalVotesToClose, "Total votes are less than required minimum to get results");
+    uint result = (vDetail.votedFor_count * 100) / vDetail.totalVotes;
+    if (result >= 60) {
+      return true;
+    }
+    return false;
   }
 
   function getVotingDetails(uint _proposal_id) external view returns(VoteDetails memory) {
