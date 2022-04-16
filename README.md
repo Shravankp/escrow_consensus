@@ -20,9 +20,9 @@ Eg: Finance department/admin can lock-in a portion of tax collected to these con
 - executors have static roles here, but this can be dynamic with different authoritative power and roles in the system
 - Enable admin to change the proposal details based on the votes
 - Funds can be released in stages, seek for approval from appropriate people after each stage, get pre-money & full money after each stage completion
-- We assume every aadhaar number input is right and valid
 - Voting logic can be made dynamic based on usecases of each proposals
 - Add events whenever there is a state change so that can be shown on frontend
+- We assume everyone has only 1 wallet address, but actually 1 member can have multiple accounts, so maybe we can map each aadhaar with 1 wallet address to restrict this
 
 ## System design:
 Entities:

@@ -6,18 +6,16 @@ import "hardhat/console.sol";
 import "./voting.sol";
 import "./escrow.sol";
 
-//add console.logs to all functions
-
 contract Governance is Ownable {
 
-  enum Status {proposalCreated, executorsAllocated, amountAllocated, calledForVote, votingClosed, resultDeclared, fundsReverted, fundsReleased}
+  enum Status {proposalCreated, executorsAllocated, amountAllocated, resultDeclared, fundsReverted, fundsReleased}
   
   struct Proposal {
     string proposalName;
     string proposalString;
-    uint voteCount;
     address[] executors;
     Status proposalStatus;
+    bool approved;
   }
 
   Proposal[] public proposals;
@@ -31,29 +29,31 @@ contract Governance is Ownable {
       initialised = true;
   }
 
-  function createProposal(string memory _proposalName, string memory _proposalString) external onlyOwner returns(uint) {
-    require(initialised == true, "not initialized");
+  function createProposal(string memory _proposalName, string memory _proposalString, uint minTotalVotesToClose) external onlyOwner returns(uint) {
+    require(initialised, "not initialized");
     Proposal memory proposal;
     proposal.proposalName = _proposalName;
     proposal.proposalString = _proposalString;
     proposal.proposalStatus = Status.proposalCreated;
     proposals.push(proposal);
     uint proposal_id = proposals.length - 1;
+    console.log("proposal id: ", proposal_id);
+
+    Voting voting = Voting(voting_address);
+    voting.initialize(proposal_id, minTotalVotesToClose);
     return proposal_id;
   }
 
-  function allocateExecutors(uint _proposalId, address[] memory _addresses) external view onlyOwner {
-    Proposal memory proposal = proposals[_proposalId];
+  function allocateExecutors(uint _proposalId, address[] memory _addresses) external onlyOwner {
+    Proposal storage proposal = proposals[_proposalId];
     require(proposal.proposalStatus == Status.proposalCreated, "proposal not created with this id");
     proposal.executors = _addresses;
     proposal.proposalStatus = Status.executorsAllocated;
   }
 
   function allocateAmount(uint _proposalId) external payable onlyOwner{
-    Proposal memory proposal = proposals[_proposalId];
+    Proposal storage proposal = proposals[_proposalId];
     require(proposal.proposalStatus == Status.executorsAllocated, "executors not allocated yet");
-    // (bool success, ) = escrow_address.call{value: msg.value}("");
-    // require(success, "Transfer failed.");
     Escrow escrow = Escrow(escrow_address);
     console.log("before addFunds balance", this.getBalance());
     escrow.addFunds{value: msg.value}(_proposalId);
@@ -61,15 +61,14 @@ contract Governance is Ownable {
     proposal.proposalStatus = Status.amountAllocated;
   }
 
-  function callForVoting() public {
-    //change proposal status to callForVoting so that people will be able to vote
+  function getVotingResult(uint _proposal_id) public returns (bool) {
+
   }
 
-  function getListOfProposalsToVote() public {
-  }
+  //if proposal didn't meet the voting majority then send the amount back to ministry
 
-  function updateProposalStatus() public view {
-    console.log("working fine");
+  function getListOfProposalsToVote() public view onlyOwner returns(Proposal[] memory){
+    return proposals;
   }
 
   function getBalance() public view returns (uint) {
@@ -80,5 +79,7 @@ contract Governance is Ownable {
     return address(this);
   }
 
-  //if proposal didn't meet the voting majority then send the amount back to ministry
+  function getProposalStatus(uint _proposal_id) public view returns (Proposal memory) {
+    return proposals[_proposal_id];
+  }
 }

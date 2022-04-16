@@ -13,8 +13,8 @@ contract Escrow is Ownable {
       proposalId_to_amount[proposal_id] = msg.value;
   }
 
-  function releaseFunds() external view {}
-  function revertFunds() external view {} //back to governance
+  function releaseFunds() external view onlyOwner {}
+  function revertFunds() external view onlyOwner{} //back to governance
 
   function getEscrowBalanceForProposal(uint proposal_id) external view returns(uint) {
     return proposalId_to_amount[proposal_id];
