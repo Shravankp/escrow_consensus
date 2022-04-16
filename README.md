@@ -27,9 +27,8 @@ Entities:
 - Voters
 
 steps involved:
-- admin deploys the code
-- admin becomes the owner of all governance contract
-- governance contract becomes the owner of escrow and voting
+- admin deploys the code thereby becomes the owner of governance contract
+- make governance contract the owner of escrow and voting
 - admin will createProposal with required details
 - admin locks-in the funds
 - admin will add executors/recipients
@@ -40,12 +39,12 @@ steps involved:
 
 
 ### execution flow
-make governance.sol owner of escrow.sol & voting.sol
-initialize
-createProposal
-allocateExecutors
-allocateAmount
-giveVote (voting.sol)
-closeVoting
-getVotingResult
-releaseFunds
+- make governance.sol owner of escrow.sol & voting.sol
+- initialize
+- createProposal
+- allocateExecutors
+- allocateAmount
+- giveVote (voting.sol)
+- closeVoting
+- getVotingResult
+- releaseFunds
