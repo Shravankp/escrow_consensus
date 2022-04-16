@@ -7,7 +7,7 @@ import "hardhat/console.sol";
 contract Escrow is Ownable {
   mapping(uint => uint) proposalId_to_amount;
 
-  function addFunds(uint _proposal_id) external payable onlyOwner{
+  function addFunds(uint _proposal_id) external payable{
     proposalId_to_amount[_proposal_id] = msg.value;
   }
 
@@ -31,10 +31,6 @@ contract Escrow is Ownable {
   function getEscrowBalanceForProposal(uint _proposal_id) external view returns(uint) {
     return proposalId_to_amount[_proposal_id];
   }
- 
-  // receive() external payable {
-  //     console.log("Amount sent without valid fallback function");
-  // }
 
   function getBalance() public view returns (uint) {
     return address(this).balance;

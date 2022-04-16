@@ -23,7 +23,7 @@ contract Governance is Ownable {
   address voting_address;
   bool initialised;
 
-  function initialize(address payable _escrow_address, address _voting_address) external onlyOwner  {
+  function initialize(address payable _escrow_address, address _voting_address) external onlyOwner {
       escrow_address = _escrow_address;
       voting_address = _voting_address;
       initialised = true;
@@ -34,15 +34,14 @@ contract Governance is Ownable {
     Proposal memory proposal = Proposal(_proposalName, _proposalString, new address payable [](0), Status.proposalCreated, false);
     proposals.push(proposal);
     uint proposal_id = proposals.length - 1;
+    
     console.log("proposal id: ", proposal_id);
-
     Voting voting = Voting(voting_address);
     voting.initialize(proposal_id, minTotalVotesToClose);
     return proposal_id;
   }
 
   function allocateExecutors(uint _proposal_id, address payable[] memory _addresses) external onlyOwner {
-    //try: can you use memory below?
     Proposal storage proposal = proposals[_proposal_id];
     require(proposal.proposalStatus == Status.proposalCreated, "proposal not created with this id");
     proposal.executors = _addresses;
@@ -93,7 +92,7 @@ contract Governance is Ownable {
     }
   }
 
-  function getListOfProposals() public view returns(Proposal[] memory){
+  function getAllProposals() public view returns(Proposal[] memory){
     return proposals;
   }
 
@@ -103,9 +102,5 @@ contract Governance is Ownable {
 
   function contractAddress() public view returns (address) {
     return address(this);
-  }
-
-  function getProposalStatus(uint _proposal_id) public view returns (Proposal memory) {
-    return proposals[_proposal_id];
   }
 }

@@ -1,70 +1,51 @@
-# Escrow system to manage funds with consensus
-Escrow mechanism executed based on consensus fullfillment
+# Escrow system with consensus fulfilment for better governance
 
-A system where admin can lock in funds in smart contracts and the amount is released upon consensus fullfillment:
-initial amount to buy supplies
-amount based on proposed product receipts
-final amount upon completion
+A system where admin can lock in funds in smart contracts and the amount is released upon consensus fullfillment.
+This system makes sure, no one not even admin will not be able to manipulate voting data and cannot posses any control on funds unless approved by consensus
 
-Eg: Finance department/admin can lock-in a portion of tax collected to these contracts to address the issues where governance needs to be done based on the public votes
+Eg: Finance department/admin can lock-in a portion of tax collected to these contracts to address the issues where governance needs to be done based on the public votes.
+A large company wants to decide if funds to be allocated for a specific cause based on their employee votes.
 
-## Usecase:
-- Traceability: People can get accountability on the taxes they pay
-- This system can act as an enhancer for governance not as a replacer
-- Frequent voting on pressing issues can be done easily which make sures the opinions of people/stakeholders are heard
-- This is not a decision making system put in the hands of people, it is merely a vocal and traceable system to enhance governance
-- This system need not apply only for politics this can be used for governance in any large system be it private or public entities
+- This system solves for biases related to voting machine and its management.
+- Use blockchain based escrow system instead of 3rd party as a money manager.
+- Makes the system traceable, i.e people can get accountability on the funds/taxes they pay.
+- Frequent voting on pressing issues can be done easily which make sures the opinions of people/stakeholders are heard.
 
 ## Assumptions/Improvements:
-- We store the proposal as a string which can be stored as a doc link
-- executors have static roles here, but this can be dynamic with different authoritative power and roles in the system
+- Executors have static roles here, but this can be dynamic with different authoritative power and roles in the system
 - Enable admin to change the proposal details based on the votes
-- Funds can be released in stages, seek for approval from appropriate people after each stage, get pre-money & full money after each stage completion
+- Funds can be released in stages, i.e contract can seek approval from appropriate people after each stage, get pre/initial money & after each stage completion can release full money 
 - Voting logic can be made dynamic based on usecases of each proposals
-- Add events whenever there is a state change so that can be shown on frontend
 - We assume everyone has only 1 wallet address, but actually 1 member can have multiple accounts, so maybe we can map each aadhaar with 1 wallet address to restrict this
+- We store the proposal details as a string here which can be stored in a better way maybe as a doc link
+- Add events whenever there is a state change so that can be shown on frontend
 
 ## System design:
 Entities:
-- Admins/supervisors with special powers for supervising
-- Executors (builders, suppliers, employees - everyone involved for execution of proposal)
-- People
-
-Mechanisms:
-- Distribution of tokens that represents vote, based on aadhaar number (map every aadhaar with a wallet address)
-- Voting
-- Releasing the funds to the executors upon fullfillment
-
-
-Functions:
-
-AdminsFuncs:
-Create proposals - description, stages, status, allocated_amount, executors, deadline
-Locking in collected Tax Funds by admins (by IT department)
-
-Executors:
-Update the status of each stages and get approval from people
-
-People:
-Voting for different proposals
-
- 
+- Admins/supervisors
+- Executors (everyone involved in execution of proposal who act as recipients of the fund)
+- Voters
 
 steps involved:
 - admin deploys the code
-- admin becomes the owner of all three contracts
-- admin is the owner of governance.sol and governance is the owner of escrow.sol and voting.sol
+- admin becomes the owner of all governance contract
+- governance contract becomes the owner of escrow and voting
 - admin will createProposal with required details
-- admin can lock-in the amount
-- admin will add executors/recipients - executors should already been registered before admin adds i.e we need aadhaar-to-address mapping
-- executor gets some money before initial phase
-- executor updates the status and seeks for approval from admins
-- once all stages are complete the money is released proportionately to executors/ministers
-
-Things to make sure:
-- admin should not be able to manipulate voting data
-- admin should not have any control on funds unless approved by consensus
+- admin locks-in the funds
+- admin will add executors/recipients
+- admin calls for voting
+- people/stakeholders vote for or against the proposal
+- voting closes and result is declared
+- based on result, either the fund is transferred to recipients or reverted to governance contract
 
 
-
-
+### execution flow
+make governance.sol owner of escrow.sol & voting.sol
+initialize
+createProposal
+allocateExecutors
+allocateAmount
+giveVote (voting.sol)
+closeVoting
+getVotingResult
+releaseFunds
