@@ -3,13 +3,14 @@
 A system where admin can lock in funds in smart contracts and the amount is released upon consensus fullfillment.
 This system makes sure, no one not even admin will not be able to manipulate voting data and cannot posses any control on funds unless approved by consensus
 
-Eg: Finance department/admin can lock-in a portion of tax collected to these contracts to address the issues where governance needs to be done based on the public votes.
-A large company wants to decide if funds to be allocated for a specific cause based on their employee votes.
-
 - This system solves for biases related to voting machine and its management.
 - Use blockchain based escrow system instead of 3rd party as a money manager.
 - Makes the system traceable, i.e people can get accountability on the funds/taxes they pay.
 - Frequent voting on pressing issues can be done easily which make sures the opinions of people/stakeholders are heard.
+
+Eg: 
+1. Finance department/admin can lock-in a portion of tax collected to these contracts to address the issues where governance needs to be done based on the public votes.
+2. A large company wants to decide if funds to be allocated for a specific cause based on their employee votes.
 
 ## Assumptions/Improvements:
 - Executors have static roles here, but this can be dynamic with different authoritative power and roles in the system
